@@ -31,6 +31,11 @@ if len(sys.argv) > 2:
 else:
     herokuApp = input('HerokuApp: ')
 
+if len(sys.argv) > 3:
+    commit = sys.argv[3]
+else:
+    commit = input('Commit message: ')
+
 os.chdir(project)
 if not os.path.exists('.git'):
     print('[git] start git init')
@@ -55,10 +60,6 @@ print('[git] start git add')
 os.system('git add .')
 print()
 print('[git] start git commit')
-if len(sys.argv) > 3:
-    commit = sys.argv[3]
-else:
-    commit = input('Commit message: ')
 os.system(f'git commit -m {commit}')
 print()
 print('[git] start git push')
