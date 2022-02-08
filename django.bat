@@ -19,8 +19,8 @@ python djangoupload.py %project% %app% %commit%
 if "%project%" == "" (
 set /p project=Project: 
 )
-cls
-python !project!/manage.py runserver
+start cmd /k "python !project!/manage.py runserver"
+start http://127.0.0.1:8000/%app%
 pause
 ) else (
 @echo [error] input error
