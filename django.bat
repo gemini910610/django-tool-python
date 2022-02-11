@@ -21,6 +21,7 @@ set /p project=Project:
 )
 start cmd /k "python !project!/manage.py runserver"
 start http://127.0.0.1:8000/%app%
+@echo.
 pause
 ) else (
 @echo [error] input error
