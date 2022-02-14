@@ -41,17 +41,17 @@ if not os.path.exists('.git'):
     print('[git] start git init')
     os.system('git init')
     print()
-    os.chdir(project)
-    settings = readfile('settings.py')
-    for index in range(len(settings)):
-        if settings[index] == 'DEBUG = True':
-            settings[index] = 'DEBUG = False'
-        elif settings[index] == 'ALLOWED_HOSTS = []':
-            settings[index] = f'ALLOWED_HOSTS = [\'{herokuApp}.herokuapp.com\']'
-    writefile('settings.py', settings)
-    print('[file] "settings.py" modify done')
-    print()
-    os.chdir('..')
+os.chdir(project)
+settings = readfile('settings.py')
+for index in range(len(settings)):
+    if settings[index] == 'DEBUG = True':
+        settings[index] = 'DEBUG = False'
+    elif settings[index] == 'ALLOWED_HOSTS = []':
+        settings[index] = f'ALLOWED_HOSTS = [\'{herokuApp}.herokuapp.com\']'
+writefile('settings.py', settings)
+print('[file] "settings.py" modify done')
+print()
+os.chdir('..')
 
 print('[git] start git remote')
 os.system(f'heroku git:remote -a {herokuApp}')
@@ -67,5 +67,16 @@ os.system('git push heroku master')
 print()
 os.system('heroku ps:scale web=1')
 os.system('heroku open')
+print()
+
+os.chdir(project)
+settings = readfile('settings.py')
+for index in range(len(settings)):
+    if settings[index] == 'DEBUG = False':
+        settings[index] = 'DEBUG = True'
+    elif settings[index] == f'ALLOWED_HOSTS = [\'{herokuApp}.herokuapp.com\']':
+        settings[index] = 'ALLOWED_HOSTS = []'
+writefile('settings.py', settings)
+print('[file] "settings.py" modify done')
 print()
 os.system('pause')
