@@ -9,6 +9,7 @@ if "%mode%" == "" (
 @echo 1. make
 @echo 2. upload
 @echo 3. runserver
+@echo 4. migrate
 set /p mode=^>^> 
 )
 if %mode% equ 1 (
@@ -21,6 +22,14 @@ set /p project=Project:
 )
 start cmd /k "python !project!/manage.py runserver"
 start http://127.0.0.1:8000/%app%
+) else if %mode% == 4 (
+if "%project%" == "" (
+set /p project=Project: 
+)
+python !project!/manage.py makemigrations
+python !project!/manage.py migrate
+@echo.
+pause
 ) else (
 @echo [error] input error
 @echo.
