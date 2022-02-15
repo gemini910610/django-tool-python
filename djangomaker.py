@@ -37,12 +37,17 @@ if not os.path.exists(project):
     settings = readfile('settings.py')
     for index in range(len(settings)):
         if settings[index] == 'from pathlib import Path':
-            settings[index] = 'import os\nfrom pathlib import Path'
+            settings[index] = 'import os\nfrom pathlib import Path\nfrom whitenoise import WhiteNoise'
+        elif settings[index] == 'MIDDLEWARE = [':
+            settings[index] = 'MIDDLEWARE = [\n    \'whitenoise.middleware.WhiteNoiseMiddleware\','
         elif settings[index] == '        \'DIRS\': [],':
             settings[index] = '        \'DIRS\': [os.path.join(BASE_DIR, \'templates\')],'
+        elif settings[index] == 'STATIC_URL = \'static/\'':
+            settings[index] = 'STATIC_URL = \'static/\'\n\nSTATIC_ROOT = BASE_DIR / \'static\'\n\nSTATICFILES_STORAGE = \'whitenoise.storage.CompressedManifestStaticFilesStorage\''
     writefile('settings.py', settings)
     print('[project] "settings.py" mpdify done')
     os.chdir('..')
+    os.system('python manage.py collectstatic')
 else:
     os.chdir(project)
 
@@ -83,7 +88,7 @@ for index in range(len(urls)):
     if urls[index] == 'from django.urls import path':
         urls[index] += ', include'
     elif urls[index] == ']':
-        urls[index] = f'    path(\'{app}/\', include(\'{app}.urls\')),\n]'
+        urls[index] = f'    path(\'\', include(\'{app}.urls\')),\n]'
 writefile('urls.py', urls)
 print('[project] "urls.py" mpdify done')
 
@@ -115,6 +120,6 @@ print('[app] "views.py" mpdify done')
 os.chdir('..')
 os.system('start cmd /k "python manage.py runserver"')
 print('[server] running...')
-os.system(f'start http://127.0.0.1:8000/{app}')
+os.system(f'start http://127.0.0.1:8000/')
 print()
 os.system('pause')
