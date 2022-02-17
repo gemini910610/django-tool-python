@@ -7,9 +7,10 @@ set commit=%4%
 if "%mode%" == "" (
 @echo What do you want to do ?
 @echo 1. make
-@echo 2. upload
-@echo 3. runserver
-@echo 4. migrate
+@echo 2. upload^(heroku^)
+@echo 3. upload^(git^)
+@echo 4. runserver
+@echo 5. migrate
 set /p mode=^>^> 
 )
 if %mode% equ 1 (
@@ -17,12 +18,14 @@ python djangomaker.py %project% %app%
 ) else if %mode% equ 2 (
 python djangoupload.py %project% %app% %commit%
 ) else if %mode% equ 3 (
+python djangouploadgit.py %project% %commit%
+) else if %mode% equ 4 (
 if "%project%" == "" (
 set /p project=Project: 
 )
 start cmd /k "python !project!/manage.py runserver"
 start http://127.0.0.1:8000/%app%
-) else if %mode% == 4 (
+) else if %mode% equ 5 (
 if "%project%" == "" (
 set /p project=Project: 
 )
